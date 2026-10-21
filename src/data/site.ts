@@ -18,7 +18,7 @@ export const site = {
     'I also like to build open source web apps for various purposes related to my hobbies, that may be useful to others as well.',
   ],
   authorNames: ['Signý Kristín Sigurjónsdóttir', 'S. K. Sigurjónsdóttir'],
-  email: 'signyk@hi.is',
+  email: 'signy@signykristin.is',
   socials: [
     { label: 'GitHub', href: 'https://github.com/signyk', icon: 'simple-icons:github' },
     { label: 'ORCID', href: 'https://orcid.org/0009-0000-1970-2633', icon: 'simple-icons:orcid' },
