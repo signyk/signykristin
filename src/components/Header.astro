@@ -1,0 +1,57 @@
+---
+import { getNav } from '../lib/content';
+import ThemeToggle from './ThemeToggle.astro';
+
+const nav = await getNav();
+const current = Astro.url.pathname;
+const isCurrent = (href: string) =>
+  href === '/' ? current === '/' : current.startsWith(href.replace(/\/$/, ''));
+---
+
+<header class="container">
+  <nav aria-label="Main">
+    <ul role="list">
+      {nav.map(({ label, href }) => (
+        <li>
+          <a href={href} aria-current={isCurrent(href) ? 'page' : undefined}>
+            {label}
+          </a>
+        </li>
+      ))}
+    </ul>
+    <ThemeToggle />
+  </nav>
+</header>
+
+<style>
+  header {
+    display: flex;
+    justify-content: flex-end;
+    padding-block: var(--space-6);
+  }
+
+  nav,
+  ul {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  nav a {
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+    text-decoration: none;
+  }
+
+  nav a:hover,
+  nav a[aria-current='page'] {
+    color: var(--color-text);
+  }
+
+  nav a[aria-current='page'] {
+    text-decoration: underline;
+    text-decoration-color: var(--color-accent);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.4em;
+  }
+</style>

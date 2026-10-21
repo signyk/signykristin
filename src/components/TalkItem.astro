@@ -1,0 +1,39 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import LinkList from './LinkList.astro';
+
+interface Props {
+  talk: CollectionEntry<'talks'>;
+}
+
+const { title, event, location, date, links } = Astro.props.talk.data;
+const formatted = date.toLocaleDateString('en-GB', {
+  month: 'short',
+  year: 'numeric',
+  timeZone: 'UTC',
+});
+---
+
+<article>
+  <h3>{title}</h3>
+  <p class="meta">
+    {event} · {location} · <time datetime={date.toISOString().slice(0, 10)}>{formatted}</time>
+  </p>
+  <LinkList links={{ Slides: links.slides, Video: links.video }} />
+</article>
+
+<style>
+  article {
+    display: grid;
+    gap: var(--space-1);
+  }
+
+  h3 {
+    font-size: var(--text-lg);
+  }
+
+  .meta {
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+  }
+</style>

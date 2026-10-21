@@ -1,0 +1,14 @@
+# - id: short-unique-id
+#   title: Paper title
+#   authors: [Signý Kristín Sigurjónsdóttir, Co Author]
+#   venue: Journal or conference name
+#   year: 2027
+#   type: journal # journal | conference | preprint | thesis
+#   links: # all optional
+#     pdf: https://...
+#     arxiv: https://...
+#     doi: https://...
+#     code: https://...
+#   bibtex: |
+#     @article{...}
+[]

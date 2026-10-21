@@ -1,0 +1,109 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { externalAttrs } from '../lib/links';
+import LinkList from './LinkList.astro';
+import NewTabHint from './NewTabHint.astro';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+
+const { title, description, links, repo, tags } = Astro.props.project.data;
+const primary = links[0]?.href ?? repo;
+---
+
+<article class:list={['card', { linked: primary }]}>
+  <h3>
+    {primary ? (
+      <a class="primary" href={primary} {...externalAttrs(primary)}>
+        {title}
+        <NewTabHint href={primary} />
+      </a>
+    ) : (
+      title
+    )}
+  </h3>
+  <p>{description}</p>
+  {tags.length > 0 && (
+    <ul class="tags" role="list">
+      {tags.map((tag) => (
+        <li>{tag}</li>
+      ))}
+    </ul>
+  )}
+  <LinkList
+    links={{ ...Object.fromEntries(links.map(({ label, href }) => [label, href])), Code: repo }}
+  />
+</article>
+
+<style>
+  .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-6);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    transition: border-color var(--transition);
+  }
+
+  .linked:hover {
+    border-color: var(--color-muted);
+  }
+
+  .primary::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius);
+  }
+
+  .primary:focus-visible {
+    outline: none;
+  }
+
+  .primary:focus-visible::after {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+
+  .card :global(.links) {
+    position: relative;
+    z-index: 1;
+    align-self: flex-start;
+  }
+
+  h3 {
+    font-size: var(--text-lg);
+  }
+
+  h3 a {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .linked:hover h3 a {
+    color: var(--color-accent);
+  }
+
+  p {
+    color: var(--color-muted);
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .tags li {
+    padding: 0.125rem var(--space-2);
+    border-radius: 999px;
+    background: var(--color-accent-soft);
+    color: var(--color-accent);
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+</style>

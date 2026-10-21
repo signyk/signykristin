@@ -1,0 +1,49 @@
+---
+import Hero from '../components/Hero.astro';
+import ProjectGrid from '../components/ProjectGrid.astro';
+import PublicationItem from '../components/PublicationItem.astro';
+import Section from '../components/Section.astro';
+import TalkItem from '../components/TalkItem.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getProjects, getPublications, getTalks, hasResearchPage } from '../lib/content';
+
+const featured = (await getProjects()).filter((project) => project.data.featured).slice(0, 3);
+const publications = (await getPublications()).slice(0, 3);
+const talks = (await getTalks()).slice(0, 3);
+const showResearch = await hasResearchPage();
+---
+
+<BaseLayout>
+  <Hero />
+
+  <Section title="Projects" more={{ label: 'All projects', href: '/projects/' }}>
+    <ProjectGrid projects={featured} />
+  </Section>
+
+  {showResearch && (
+    <Section title="Recent publications" more={{ label: 'All research', href: '/research/' }}>
+      <ul class="stack" role="list">
+        {publications.map((publication) => (
+          <li>
+            <PublicationItem publication={publication} />
+          </li>
+        ))}
+      </ul>
+    </Section>
+  )}
+
+  {talks.length > 0 && (
+    <Section
+      title="Talks"
+      more={showResearch ? { label: 'All talks', href: '/research/#talks' } : undefined}
+    >
+      <ul class="stack" role="list">
+        {talks.map((talk) => (
+          <li>
+            <TalkItem talk={talk} />
+          </li>
+        ))}
+      </ul>
+    </Section>
+  )}
+</BaseLayout>

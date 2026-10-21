@@ -1,0 +1,52 @@
+---
+import { Icon } from 'astro-icon/components';
+import { site } from '../data/site';
+import { externalAttrs } from '../lib/links';
+import NewTabHint from './NewTabHint.astro';
+
+const links = [
+  { label: 'Email', href: `mailto:${site.email}`, icon: 'lucide:mail' },
+  ...site.socials,
+];
+---
+
+<ul class="social" role="list">
+  {links.map(({ label, href, icon }) => (
+    <li>
+      <a href={href} title={label} {...externalAttrs(href)}>
+        <Icon name={icon} aria-hidden="true" />
+        <span class="visually-hidden">{label}</span>
+        <NewTabHint href={href} />
+      </a>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .social {
+    display: flex;
+    gap: var(--space-1);
+  }
+
+  a {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    color: var(--color-muted);
+    transition:
+      color var(--transition),
+      background-color var(--transition);
+  }
+
+  a:hover {
+    color: var(--color-accent);
+    background: var(--color-accent-soft);
+  }
+
+  svg {
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+</style>

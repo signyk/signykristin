@@ -1,0 +1,90 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { site } from '../data/site';
+import LinkList from './LinkList.astro';
+
+interface Props {
+  publication: CollectionEntry<'publications'>;
+}
+
+const { title, authors, venue, year, links, bibtex } = Astro.props.publication.data;
+const isMe = (author: string) => site.authorNames.includes(author);
+---
+
+<article>
+  <h3>{title}</h3>
+  <p class="authors">
+    {authors.map((author, i) => (
+      <>
+        {isMe(author) ? <strong>{author}</strong> : author}
+        {i < authors.length - 1 && ', '}
+      </>
+    ))}
+  </p>
+  <p class="venue">
+    <em>{venue}</em>, {year}
+  </p>
+  <div class="actions">
+    <LinkList links={{ PDF: links.pdf, arXiv: links.arxiv, DOI: links.doi, Code: links.code }} />
+    {bibtex && (
+      <details>
+        <summary>BibTeX</summary>
+        <pre>{bibtex.trim()}</pre>
+      </details>
+    )}
+  </div>
+</article>
+
+<style>
+  article {
+    display: grid;
+    gap: var(--space-1);
+  }
+
+  h3 {
+    font-size: var(--text-lg);
+  }
+
+  .authors,
+  .venue {
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+  }
+
+  .authors strong {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-1) var(--space-4);
+    margin-top: var(--space-1);
+  }
+
+  details {
+    font-size: var(--text-sm);
+  }
+
+  summary {
+    color: var(--color-accent);
+    cursor: pointer;
+  }
+
+  details[open] {
+    flex-basis: 100%;
+  }
+
+  pre {
+    margin-top: var(--space-2);
+    padding: var(--space-4);
+    overflow-x: auto;
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    line-height: 1.5;
+  }
+</style>

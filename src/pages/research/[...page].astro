@@ -1,0 +1,71 @@
+---
+import PublicationItem from '../../components/PublicationItem.astro';
+import Section from '../../components/Section.astro';
+import TalkItem from '../../components/TalkItem.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPublications, getTalks, hasResearchPage } from '../../lib/content';
+
+export async function getStaticPaths() {
+  return (await hasResearchPage()) ? [{ params: { page: undefined } }] : [];
+}
+
+const publications = await getPublications();
+const talks = await getTalks();
+
+const byYear = Map.groupBy(publications, (publication) => publication.data.year);
+---
+
+<BaseLayout title="Research" description="Publications and talks.">
+  <h1>Research</h1>
+  <p class="lead">Publications and talks.</p>
+
+  <Section title="Publications">
+    {[...byYear].map(([year, entries]) => (
+      <div class="year">
+        <h3>{year}</h3>
+        <ul class="stack" role="list">
+          {entries.map((publication) => (
+            <li>
+              <PublicationItem publication={publication} />
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </Section>
+
+  <Section title="Talks">
+    <ul class="stack" role="list">
+      {talks.map((talk) => (
+        <li>
+          <TalkItem talk={talk} />
+        </li>
+      ))}
+    </ul>
+  </Section>
+</BaseLayout>
+
+<style>
+  h1 {
+    font-size: var(--text-2xl);
+  }
+
+  .lead {
+    margin-block: var(--space-2) var(--space-12);
+    color: var(--color-muted);
+    font-size: var(--text-lg);
+  }
+
+  .year + .year {
+    margin-top: var(--space-12);
+  }
+
+  .year > h3 {
+    margin-bottom: var(--space-4);
+    color: var(--color-muted);
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+  }
+</style>

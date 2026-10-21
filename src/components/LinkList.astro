@@ -1,0 +1,42 @@
+---
+import { externalAttrs } from '../lib/links';
+import NewTabHint from './NewTabHint.astro';
+
+interface Props {
+  links: Record<string, string | undefined>;
+}
+
+const entries = Object.entries(Astro.props.links).filter(
+  (entry): entry is [string, string] => entry[1] !== undefined,
+);
+---
+
+{entries.length > 0 && (
+  <ul class="links" role="list">
+    {entries.map(([label, href]) => (
+      <li>
+        <a href={href} {...externalAttrs(href)}>
+          {label}
+          <NewTabHint href={href} />
+        </a>
+      </li>
+    ))}
+  </ul>
+)}
+
+<style>
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-4);
+    font-size: var(--text-sm);
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+</style>

@@ -1,0 +1,43 @@
+---
+interface Props {
+  title: string;
+  more?: { label: string; href: string };
+}
+
+const { title, more } = Astro.props;
+const id = title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+---
+
+<section aria-labelledby={id}>
+  <div class="heading">
+    <h2 id={id}>{title}</h2>
+    {more && <a href={more.href}>{more.label} →</a>}
+  </div>
+  <slot />
+</section>
+
+<style>
+  section + :global(section) {
+    margin-top: var(--space-16);
+  }
+
+  .heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  h2 {
+    font-size: var(--text-xl);
+  }
+
+  a {
+    font-size: var(--text-sm);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+</style>
