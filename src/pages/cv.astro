@@ -1,0 +1,175 @@
+---
+import CvEntry from '../components/CvEntry.astro';
+import Section from '../components/Section.astro';
+import { cv } from '../data/cv';
+import { site } from '../data/site';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getProjects, getPublications } from '../lib/content';
+
+const projects = await getProjects();
+const publications = await getPublications();
+
+const range = (start: string, end?: string) => `${start} – ${end ?? 'present'}`;
+const shortUrl = (href: string) => href.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
+
+const contacts = [
+  { label: site.email, href: `mailto:${site.email}` },
+  ...[site.url, ...site.socials.map(({ href }) => href)].map((href) => ({
+    label: shortUrl(href),
+    href,
+  })),
+];
+---
+
+<BaseLayout title="CV" description={`Curriculum vitae of ${site.name}.`}>
+  <div class="cv">
+    <header class="intro">
+      <div>
+        <h1>{site.name}</h1>
+        <p class="role">
+          {site.role} · {site.affiliation}
+        </p>
+      </div>
+      <a class="download no-print" href="/cv.pdf">
+        Download PDF
+      </a>
+    </header>
+
+    <ul class="contacts" role="list">
+      {contacts.map(({ label, href }) => (
+        <li>
+          <a href={href}>{label}</a>
+        </li>
+      ))}
+    </ul>
+
+    <Section title="Education">
+      <ul class="entries" role="list">
+        {cv.education.map(({ title, organization, location, start, end, details }) => (
+          <li>
+            <CvEntry
+              title={title}
+              subtitle={[organization, location].filter(Boolean).join(', ')}
+              date={range(start, end)}
+              details={details}
+            />
+          </li>
+        ))}
+      </ul>
+    </Section>
+
+    <Section title="Experience">
+      <ul class="entries" role="list">
+        {cv.experience.map(({ title, organization, location, start, end, details }) => (
+          <li>
+            <CvEntry
+              title={title}
+              subtitle={[organization, location].filter(Boolean).join(', ')}
+              date={range(start, end)}
+              details={details}
+            />
+          </li>
+        ))}
+      </ul>
+    </Section>
+
+    {publications.length > 0 && (
+      <Section title="Publications">
+        <ul class="entries" role="list">
+          {publications.map(({ data }) => (
+            <li>
+              <CvEntry
+                title={data.title}
+                subtitle={`${data.authors.join(', ')}. ${data.venue}.`}
+                date={String(data.year)}
+              />
+            </li>
+          ))}
+        </ul>
+      </Section>
+    )}
+
+    <Section title="Teaching">
+      <ul class="entries" role="list">
+        {cv.teaching.map(({ title, organization, location, start, end, details }) => (
+          <li>
+            <CvEntry
+              title={title}
+              subtitle={[organization, location].filter(Boolean).join(', ')}
+              date={end ? range(start, end) : start}
+              details={details}
+            />
+          </li>
+        ))}
+      </ul>
+    </Section>
+
+    <Section title="Awards">
+      <ul class="entries" role="list">
+        {cv.awards.map(({ title, year, details }) => (
+          <li>
+            <CvEntry title={title} subtitle={details} date={year} />
+          </li>
+        ))}
+      </ul>
+    </Section>
+
+    <Section title="Projects">
+      <ul class="entries" role="list">
+        {projects.map(({ data }) => (
+          <li>
+            <CvEntry
+              title={data.title}
+              subtitle={data.description}
+              date={data.links[0] ? shortUrl(data.links[0].href) : undefined}
+            />
+          </li>
+        ))}
+      </ul>
+    </Section>
+  </div>
+</BaseLayout>
+
+<style>
+  .cv {
+    --space-16: var(--space-8);
+  }
+
+  .intro {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-4);
+  }
+
+  h1 {
+    font-size: var(--text-2xl);
+  }
+
+  .role {
+    color: var(--color-muted);
+    font-size: var(--text-lg);
+  }
+
+  .download {
+    font-size: var(--text-sm);
+  }
+
+  .contacts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-4);
+    margin-block: var(--space-4) var(--space-8);
+    font-size: var(--text-sm);
+  }
+
+  .contacts a {
+    text-decoration: none;
+  }
+
+  .entries {
+    display: grid;
+    gap: var(--space-4);
+  }
+</style>

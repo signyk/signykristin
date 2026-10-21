@@ -11,10 +11,11 @@ npm run dev
 
 ## Content
 
-| What             | Where                                 |
-| ---------------- | ------------------------------------- |
-| Name, bio, links | `src/data/site.ts`                    |
-| Projects         | `src/content/projects/`               |
-| Publications     | `src/content/publications.yaml`       |
-| Talks            | `src/content/talks.yaml`              |
-| Photo, CV        | `src/assets/photo.*`, `public/cv.pdf` |
+| What             | Where                           |
+| ---------------- | ------------------------------- |
+| Name, bio, links | `src/data/site.ts`              |
+| Projects         | `src/content/projects/`         |
+| Publications     | `src/content/publications.yaml` |
+| Talks            | `src/content/talks.yaml`        |
+| CV               | `src/data/cv.ts`                |
+| Photo            | `src/assets/photo.*`            |

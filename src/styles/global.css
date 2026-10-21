@@ -153,3 +153,41 @@ ul[role='list'] {
   display: grid;
   gap: var(--space-8);
 }
+
+@page {
+  size: A4;
+  margin: 15mm;
+}
+
+@media print {
+  :root,
+  :root[data-theme] {
+    color-scheme: light;
+
+    --color-bg: #fff;
+    --color-text: #1d1c1a;
+    --color-muted: #5c5851;
+    --color-border: #d6d2ca;
+    --color-accent: #1c6b68;
+  }
+
+  html {
+    font-size: 12px;
+  }
+
+  body > header,
+  body > footer,
+  .skip-link,
+  .no-print {
+    display: none !important;
+  }
+
+  main {
+    padding: 0 !important;
+  }
+
+  .container {
+    width: 100%;
+    max-width: none;
+  }
+}
