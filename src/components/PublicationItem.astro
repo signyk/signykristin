@@ -12,7 +12,10 @@ const isMe = (author: string) => site.authorNames.includes(author);
 ---
 
 <article>
-  <h3>{title}</h3>
+  <div class="row">
+    <h3>{title}</h3>
+    <span class="year">{year}</span>
+  </div>
   <p class="authors">
     {authors.map((author, i) => (
       <>
@@ -22,7 +25,7 @@ const isMe = (author: string) => site.authorNames.includes(author);
     ))}
   </p>
   <p class="venue">
-    <em>{venue}</em>, {year}
+    <em>{venue}</em>
   </p>
   <div class="actions">
     <LinkList links={{ PDF: links.pdf, arXiv: links.arxiv, DOI: links.doi, Code: links.code }} />
@@ -41,8 +44,25 @@ const isMe = (author: string) => site.authorNames.includes(author);
     gap: var(--space-1);
   }
 
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0 var(--space-4);
+  }
+
   h3 {
-    font-size: var(--text-lg);
+    font-size: var(--text-base);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.4;
+  }
+
+  .year {
+    color: var(--color-muted);
+    font-size: var(--text-sm);
+    font-variant-numeric: tabular-nums;
   }
 
   .authors,
@@ -69,7 +89,7 @@ const isMe = (author: string) => site.authorNames.includes(author);
   }
 
   summary {
-    color: var(--color-accent);
+    color: var(--color-muted);
     cursor: pointer;
   }
 
@@ -81,7 +101,6 @@ const isMe = (author: string) => site.authorNames.includes(author);
     margin-top: var(--space-2);
     padding: var(--space-4);
     overflow-x: auto;
-    border-radius: var(--radius);
     background: var(--color-surface);
     font-family: var(--font-mono);
     font-size: 0.8125rem;

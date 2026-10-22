@@ -6,21 +6,19 @@ const year = new Date().getFullYear();
 ---
 
 <footer class="container">
+  <p>{site.name}</p>
   <SocialLinks />
-  <p>
-    © {year} {site.name}
-  </p>
+  <p class="year">© {year}</p>
 </footer>
 
 <style>
   footer {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
+    align-items: baseline;
     justify-content: space-between;
-    gap: var(--space-4);
+    gap: var(--space-2) var(--space-6);
     padding-block: var(--space-8);
-    border-top: 1px solid var(--color-border);
     font-size: var(--text-sm);
     color: var(--color-muted);
   }

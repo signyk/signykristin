@@ -1,22 +1,23 @@
 :root {
   color-scheme: light;
 
-  --color-bg: #fbfaf7;
-  --color-surface: #f3f1ec;
-  --color-text: #1d1c1a;
-  --color-muted: #5c5851;
-  --color-border: #e2ded6;
-  --color-accent: #1c6b68;
-  --color-accent-soft: #e1eeec;
+  --color-bg: #eef0f3;
+  --color-surface: #e2e5ea;
+  --color-text: #0b0c0e;
+  --color-muted: #5d6470;
+  --color-accent: #1f2de6;
+  --color-accent-ink: #ffffff;
 
-  --font-sans: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --font-sans: 'Albert Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono:
+    ui-monospace, 'SF Mono', Menlo, Consolas, monospace; /* BibTeX only. taste-skill-ignore */
 
-  --text-sm: 0.875rem;
-  --text-base: 1rem;
-  --text-lg: 1.125rem;
-  --text-xl: clamp(1.375rem, 1.2rem + 0.6vw, 1.625rem);
-  --text-2xl: clamp(2rem, 1.6rem + 1.8vw, 2.875rem);
+  /* Four steps: small, body, heading, display. */
+  --text-sm: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
+  --text-base: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+  --text-lg: var(--text-base);
+  --text-xl: clamp(1.5rem, 1.3rem + 0.6vw, 1.75rem);
+  --text-2xl: clamp(2.5rem, 1rem + 4.6vw, 5rem);
 
   --space-1: 0.25rem;
   --space-2: 0.5rem;
@@ -26,35 +27,33 @@
   --space-8: 2rem;
   --space-12: 3rem;
   --space-16: 4rem;
+  --space-section: clamp(6rem, 4.5rem + 4vw, 8.75rem);
 
-  --radius: 0.5rem;
-  --content-width: 44rem;
-  --transition: 150ms ease;
+  --content-width: 36rem;
+  --transition: 180ms ease;
 }
 
 :root[data-theme='dark'] {
   color-scheme: dark;
 
-  --color-bg: #141517;
-  --color-surface: #1c1e21;
-  --color-text: #e9e7e2;
-  --color-muted: #a29e96;
-  --color-border: #2d3033;
-  --color-accent: #6fc7c0;
-  --color-accent-soft: #1d3331;
+  --color-bg: #0e1014;
+  --color-surface: #1a1d23;
+  --color-text: #eceef2;
+  --color-muted: #9aa1ad;
+  --color-accent: #7f91ff;
+  --color-accent-ink: #0e1014;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme]) {
     color-scheme: dark;
 
-    --color-bg: #141517;
-    --color-surface: #1c1e21;
-    --color-text: #e9e7e2;
-    --color-muted: #a29e96;
-    --color-border: #2d3033;
-    --color-accent: #6fc7c0;
-    --color-accent-soft: #1d3331;
+    --color-bg: #0e1014;
+    --color-surface: #1a1d23;
+    --color-text: #eceef2;
+    --color-muted: #9aa1ad;
+    --color-accent: #7f91ff;
+    --color-accent-ink: #0e1014;
   }
 }
 
@@ -81,7 +80,7 @@ body {
   color: var(--color-text);
   font-family: var(--font-sans);
   font-size: var(--text-base);
-  line-height: 1.65;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -89,8 +88,8 @@ h1,
 h2,
 h3 {
   font-weight: 600;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
   text-wrap: balance;
 }
 
@@ -99,20 +98,28 @@ p {
 }
 
 a {
-  color: var(--color-accent);
+  color: var(--color-text);
+  text-decoration-color: var(--color-muted);
   text-decoration-thickness: 1px;
   text-underline-offset: 0.2em;
-  transition: color var(--transition);
+  transition:
+    color var(--transition),
+    text-decoration-color var(--transition);
 }
 
 a:hover {
-  color: var(--color-text);
+  color: var(--color-accent);
+  text-decoration-color: currentColor;
 }
 
 :focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 3px;
-  border-radius: 2px;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
 }
 
 img,
@@ -129,6 +136,25 @@ ul[role='list'] {
 .container {
   width: min(100% - 2 * var(--space-4), var(--content-width));
   margin-inline: auto;
+}
+
+.button {
+  display: inline-block;
+  padding: 0.7em 1.25em;
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
+  font-weight: 500;
+  line-height: 1;
+  text-decoration: none;
+  transition: transform 140ms ease;
+}
+
+.button:hover {
+  color: var(--color-accent-ink);
+}
+
+.button:active {
+  transform: scale(0.97);
 }
 
 .visually-hidden {
@@ -165,10 +191,9 @@ ul[role='list'] {
     color-scheme: light;
 
     --color-bg: #fff;
-    --color-text: #1d1c1a;
-    --color-muted: #5c5851;
-    --color-border: #d6d2ca;
-    --color-accent: #1c6b68;
+    --color-text: #0b0c0e;
+    --color-muted: #5d6470;
+    --color-accent: #1f2de6;
   }
 
   html {

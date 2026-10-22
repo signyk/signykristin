@@ -1,6 +1,7 @@
 ---
 import type { ImageMetadata } from 'astro';
 import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
 import { site } from '../data/site';
 import SocialLinks from './SocialLinks.astro';
 
@@ -18,8 +19,8 @@ const photo = Object.values(photos)[0]?.default;
       src={photo}
       alt={`Portrait of ${site.name}`}
       style={{ objectPosition: site.photoPosition }}
-      widths={[120, 240, 360]}
-      sizes="7.5rem"
+      widths={[64, 128, 192]}
+      sizes="4rem"
       loading="eager"
       fetchpriority="high"
     />
@@ -37,35 +38,71 @@ const photo = Object.values(photos)[0]?.default;
       <p>{paragraph}</p>
     ))}
     <div class="social">
-      <SocialLinks />
+      <div class="email">
+        <a class="button" href={`mailto:${site.email}`}>
+          {site.email}
+        </a>
+        <button
+          type="button"
+          class="button copy"
+          data-email={site.email}
+          aria-label="Copy email address"
+          title="Copy email address"
+          hidden
+        >
+          <Icon name="lucide:copy" class="copy-icon" aria-hidden="true" />
+          <Icon name="lucide:check" class="check-icon" aria-hidden="true" />
+        </button>
+        <span class="visually-hidden status" aria-live="polite"></span>
+      </div>
+      <SocialLinks email={false} />
     </div>
   </div>
 </div>
 
+<script>
+  // The address opens a mail app; the button beside it copies the address instead.
+  for (const button of document.querySelectorAll<HTMLButtonElement>('.email .copy')) {
+    if (!navigator.clipboard) continue;
+
+    const { email = '' } = button.dataset;
+    const status = button.parentElement?.querySelector('.status');
+    let timer: number | undefined;
+    button.hidden = false;
+
+    button.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(email);
+      } catch {
+        return;
+      }
+      button.classList.add('is-copied');
+      if (status) status.textContent = 'Email address copied';
+      clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        button.classList.remove('is-copied');
+        if (status) status.textContent = '';
+      }, 2000);
+    });
+  }
+</script>
+
 <style>
   .hero {
     display: grid;
-    gap: var(--space-8);
-    margin-bottom: var(--space-16);
-  }
-
-  @media (min-width: 40rem) {
-    .hero {
-      grid-template-columns: auto 1fr;
-      align-items: start;
-    }
+    gap: var(--space-6);
+    padding-top: clamp(var(--space-8), 12vh, 8rem);
+    margin-bottom: var(--space-section);
   }
 
   .avatar {
     display: grid;
     place-items: center;
-    width: 7.5rem;
-    height: 7.5rem;
+    width: 4rem;
+    height: 4rem;
     border-radius: 50%;
     object-fit: cover;
-    background: var(--color-accent-soft);
-    color: var(--color-accent);
-    font-size: 2.25rem;
+    background: var(--color-surface);
     font-weight: 600;
   }
 
@@ -79,12 +116,65 @@ const photo = Object.values(photos)[0]?.default;
   }
 
   .role {
-    margin-top: calc(-1 * var(--space-2));
-    color: var(--color-muted);
-    font-size: var(--text-lg);
+    margin-bottom: var(--space-4);
+    font-size: var(--text-xl);
+    font-weight: 500;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
   }
 
   .social {
-    margin-left: calc(-1 * var(--space-2));
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4) var(--space-6);
+    margin-top: var(--space-4);
+  }
+
+  .email {
+    display: inline-flex;
+    gap: 2px;
+  }
+
+  .email .button {
+    transition:
+      transform 140ms ease,
+      background-color var(--transition),
+      color var(--transition);
+  }
+
+  .copy {
+    display: grid;
+    place-items: center;
+    padding-inline: 0.85em;
+    border: 0;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .copy[hidden] {
+    display: none;
+  }
+
+  .copy svg {
+    grid-area: 1 / 1;
+    width: 1em;
+    height: 1em;
+  }
+
+  .check-icon,
+  .is-copied .copy-icon {
+    visibility: hidden;
+  }
+
+  .is-copied .check-icon {
+    visibility: visible;
+  }
+
+  @media (hover: hover) {
+    .email .button:hover {
+      background: var(--color-text);
+      color: var(--color-bg);
+    }
   }
 </style>

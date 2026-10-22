@@ -1,5 +1,8 @@
 ---
-import '@fontsource-variable/inter';
+// Static weights, not the variable font: Chromium embeds variable fonts in PDFs as blurry Type 3 glyphs.
+import '@fontsource/albert-sans/400.css';
+import '@fontsource/albert-sans/500.css';
+import '@fontsource/albert-sans/600.css';
 import '../styles/global.css';
 
 import Footer from '../components/Footer.astro';
@@ -59,7 +62,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 <style>
   main {
     flex: 1;
-    padding-block: var(--space-12) var(--space-16);
+    padding-block: var(--space-16) var(--space-section);
   }
 
   .skip-link {
@@ -68,7 +71,6 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     left: var(--space-2);
     z-index: 10;
     padding: var(--space-2) var(--space-4);
-    border-radius: var(--radius);
     background: var(--color-text);
     color: var(--color-bg);
     transform: translateY(-200%);

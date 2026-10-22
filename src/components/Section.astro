@@ -18,7 +18,7 @@ const id = title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
 <style>
   section + :global(section) {
-    margin-top: var(--space-16);
+    margin-top: var(--space-section);
   }
 
   .heading {
@@ -27,9 +27,7 @@ const id = title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
     align-items: baseline;
     justify-content: space-between;
     gap: var(--space-4);
-    margin-bottom: var(--space-6);
-    padding-bottom: var(--space-2);
-    border-bottom: 1px solid var(--color-border);
+    margin-bottom: var(--space-8);
   }
 
   h2 {
@@ -37,8 +35,11 @@ const id = title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
   }
 
   a {
-    font-size: var(--text-sm);
-    text-decoration: none;
+    color: var(--color-muted);
     white-space: nowrap;
+  }
+
+  a:hover {
+    color: var(--color-accent);
   }
 </style>
