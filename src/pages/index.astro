@@ -7,7 +7,7 @@ import TalkItem from '../components/TalkItem.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getProjects, getPublications, getTalks, hasResearchPage } from '../lib/content';
 
-const featured = (await getProjects()).filter((project) => project.data.featured).slice(0, 3);
+const featured = (await getProjects()).filter((project) => project.data.featured).slice(0, 4);
 const publications = (await getPublications()).slice(0, 3);
 const talks = (await getTalks()).slice(0, 3);
 const showResearch = await hasResearchPage();
